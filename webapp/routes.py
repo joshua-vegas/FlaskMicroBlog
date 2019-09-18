@@ -81,6 +81,7 @@ def login():
 def profile(username):
     return '{}\'s profile'.format(escape(username))
 
+# Ecriture de print dans la console.
 with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
