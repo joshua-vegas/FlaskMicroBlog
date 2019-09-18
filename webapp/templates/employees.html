@@ -1,0 +1,30 @@
+{% extends "barre.html" %}
+{% block content %}
+    {% if result %}
+    <table id="employees" style="width:100%">
+        <tbody>
+            <tr>
+                <th>Mle</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Ville</th>
+                <th>Sexe</th>
+            </tr>
+            {% for row in result %}
+                <tr>
+                    {% if loop.index == 2 %}
+                        {% for col in row %}
+                            <td>{{ col | formater_date | upper }}</td>
+                        {% endfor %}
+                    {% else %}
+                        {% for col in row %}
+                            <td>{{ col | formater_date }}</td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
