@@ -13,9 +13,13 @@
     <body>
         <div>
             Microblog :
-            <a href="/index">Accueil</a>
+            <a href="{{ url_for('index') }}">Accueil</a>
             <a href="/employees">Tableau employee</a>
-            <a href="/login">Connexion / login</a>
+            {% if current_user.is_anonymous %}
+                <a href="/login">Connexion / login</a>
+            {% else %}
+                <a href="/logout">Déconnexion / logout</a>
+            {% endif %}
             <hr>
             <!--
                 Grâce à la fonction get_flashed_messages on récupère dans une

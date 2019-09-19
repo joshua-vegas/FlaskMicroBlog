@@ -4,7 +4,7 @@
 <!-- Définition du code présent dans le bloc content -->
 {% block content %}
     <body>
-        <h1>Bonjour, {{ user.username }}</h1>
+        <h1>Bonjour, {{ current_user.username }}</h1>
         {% for post in posts %}
             <div>
                 <p>{{ post.author.username }} dit : <b>{{ post.body }}</b></p>

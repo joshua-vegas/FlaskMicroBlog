@@ -1,6 +1,11 @@
 from flask import Flask, render_template, escape, url_for
 from webapp import app
 from bdd.connector import connect
+from flask_login import current_user, login_user, logout_user, login_required
+from webapp.models import User
+from webapp.forms import LoginForm
+from flask import render_template, flash, redirect
+from format_date import formater_date
 
 @app.route('/')
 @app.route('/index')
@@ -8,7 +13,6 @@ from bdd.connector import connect
 def index():
     # Return le h1 avec css instyle
     # return "<h1 style='color:red;'>Hello, World</h1>"
-    user = {'username' : 'Moez'}
     posts = [
         {
             'author' : {'username': 'Josh'},
@@ -33,15 +37,16 @@ def index():
     #     </html>
     # '''
 
+
     return render_template(
                               'index.html',
                               title="Page d'accueil",
-                              user = user,
                               posts = posts
                           )
 
-@app.route('/employees')
 
+@app.route('/employees')
+@login_required
 def employees():
 
     # Ici je met dans la variable result la valeur retourné par la fonction
@@ -54,18 +59,33 @@ def employees():
                           )
 
 
-from webapp.forms import LoginForm
-from flask import render_template, flash, redirect
-from format_date import formater_date
 @app.route('/login', methods = ['GET', 'POST'])
 
 def login():
-    form = LoginForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
 
+    form = LoginForm()
     # Par défaut au chargement de la page, validate_on_submit est à false
     # du coup la condition n'est pas remplie et il n'y a pas de redirection.
     # On passera cette méthode à tru en cliquant sur le bouton d'envoi du formulaire.
     if form.validate_on_submit():
+        user = User.query.filter_by(username = form.username.data).first()
+
+        if user is None or not user.check_password(form.password.data):
+            flash('Login ou mot de passe invalide')
+            return redirect(url_for('login'))
+        login_user(user, remember = form.remember_me.data)
+        return redirect(url_for('index'))
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).nextloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+
+    return render_template('login.html', title = 'Authentification', form = form)
+
+
+    '''
         # La fonction flash permet de facilement envoyer un message à l'utilisateur
         # s'il a réussi à se connecter par exemple.
         flash('Login obligatoire pour {}, se_rappeler_de_moi = {}'.format(
@@ -73,8 +93,12 @@ def login():
         ))
         # Fonction redirect qui permet de rediriger l'utilisateur sur la page index
         return redirect('/index')
+    '''
 
-    return render_template('login.html', title = 'Authentification', form = form)
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @app.route('/user/<username>')
