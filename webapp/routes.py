@@ -1,10 +1,9 @@
-from flask import Flask, render_template, escape, url_for
-from webapp import app
+from flask import Flask, render_template, escape, url_for, flash, redirect
+from webapp import app, db
 from bdd.connector import connect
 from flask_login import current_user, login_user, logout_user, login_required
 from webapp.models import User
-from webapp.forms import LoginForm
-from flask import render_template, flash, redirect
+from webapp.forms import LoginForm, CreateAccountForm
 from format_date import formater_date
 
 @app.route('/')
@@ -59,8 +58,30 @@ def employees():
                           )
 
 
-@app.route('/login', methods = ['GET', 'POST'])
+# référence tutoriel : https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
+@app.route('/inscription', methods = ['GET', 'POST'])
+def inscription():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
 
+    form = CreateAccountForm()
+
+    if form.validate_on_submit():
+        user = User(username = form.username.data, email = form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Félicitation vous avez créer un nouveau compte.')
+        return redirect(url_for('login'))
+
+    return render_template(
+                              'inscription.html',
+                              title = 'Création de compte',
+                              form = form
+                          )
+
+
+@app.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -68,7 +89,7 @@ def login():
     form = LoginForm()
     # Par défaut au chargement de la page, validate_on_submit est à false
     # du coup la condition n'est pas remplie et il n'y a pas de redirection.
-    # On passera cette méthode à tru en cliquant sur le bouton d'envoi du formulaire.
+    # On passera cette méthode à true en cliquant sur le bouton d'envoi du formulaire.
     if form.validate_on_submit():
         user = User.query.filter_by(username = form.username.data).first()
 

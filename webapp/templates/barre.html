@@ -15,6 +15,7 @@
             Microblog :
             <a href="{{ url_for('index') }}">Accueil</a>
             <a href="/employees">Tableau employee</a>
+            <a href="{{ url_for('inscription')}}">Création de compte</a>
             {% if current_user.is_anonymous %}
                 <a href="/login">Connexion / login</a>
             {% else %}
