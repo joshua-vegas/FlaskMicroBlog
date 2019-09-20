@@ -10,4 +10,7 @@ class Config(object):
     # Si il n'y a pas de bdd, il créer une bdd sqlite qui se nomme app.db
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
+    # password = ''
+    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:'+password+'@localhost/micro_blog'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # mysql://scott:tiger@localhost/mydatabase
