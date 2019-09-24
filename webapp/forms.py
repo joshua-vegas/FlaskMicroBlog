@@ -11,8 +11,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Me connecter')
 
 class CreateAccountForm(FlaskForm):
-    username = StringField(' Utilisateur', validators = [DataRequired()])
-    email = StringField(' Courriel', validators = [DataRequired(), Email()])
+    username = StringField('Utilisateur', validators = [DataRequired()])
+    email = StringField('Courriel', validators = [DataRequired(), Email()])
     password = PasswordField('Mot de passe', validators = [DataRequired()])
     password2 = PasswordField(
                                  'Mot de passe',
@@ -29,3 +29,15 @@ class CreateAccountForm(FlaskForm):
         user = User.query.filter_by(email = email.data).first()
         if user is not None:
             raise ValidationError('Email déjà utilisé, veuillez en choisir un nouveau.')
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators = [DataRequired(), Email()])
+    submit = SubmitField('Reset Password Request')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Mot de passe', validators = [DataRequired()])
+    password2 = PasswordField(
+                                 'Répétez votre mot de passe',
+                                 validators = [DataRequired(), EqualTo('password')]
+                             )
+    submit = SubmitField('Réinitialisez votre mot de passe')

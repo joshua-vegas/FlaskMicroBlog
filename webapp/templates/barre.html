@@ -21,6 +21,7 @@
             {% else %}
                 <a href="/logout">Déconnexion / logout</a>
             {% endif %}
+            <a href="{{ url_for('reset_password_request') }}"> Réinitialisez votre mot de passe</a>
             <hr>
             <!--
                 Grâce à la fonction get_flashed_messages on récupère dans une
