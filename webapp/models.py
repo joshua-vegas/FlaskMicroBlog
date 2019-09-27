@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import current_app
+from flask import current_app, url_for
 from webapp import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -52,6 +52,27 @@ class User(UserMixin, db.Model):
         except:
             return
         return User.query.get(id)
+
+    def to_dict(self, include_email = False):
+        data = {
+            "id": self.id,
+            "username": self.username,
+            "post_count": self.posts.count(),
+            "_links": {
+                "self": url_for("api.get_user", id = self.id),
+                "posts": url_for("api.get_posts", id = self.id)
+            }
+        }
+        if include_email:
+            data["email"] = self.email
+        return data
+
+    def from_dict(self, data, new_user = False):
+        for field in ['username', 'email']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            self.set_password[data['password']]
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)

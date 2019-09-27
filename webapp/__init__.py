@@ -32,6 +32,8 @@ login.login_message = _l('Please log in to access this page.')
 mail = Mail()
 babel = Babel()
 
+# Création d'une factory qui permt d'ajouter toutes les fonctionnalités et les
+# qu'on souhaite à une fonction du __init__ de notre projet
 def create_app(config_class = Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -44,6 +46,8 @@ def create_app(config_class = Config):
     app.register_blueprint(mn_bp)
     from webapp.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    from webapp.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
     return app
 
 from webapp import models
