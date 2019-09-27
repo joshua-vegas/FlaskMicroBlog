@@ -1,11 +1,13 @@
 from flask_mail import Message
-from webapp import mail, app
+from webapp import mail
 from flask import render_template
 from threading import Thread
 
+from flask import current_app
+
 # fonction d'envoie de mail asynchrone (Threading)
 def send_async_email(app, msg):
-    with app.app_context():
+    with current_app.app_context():
         mail.send(msg)
 
 # fonction d'envoie de mail basique
@@ -14,7 +16,10 @@ def send_email(subject, sender, recipients, text_body, html_body):
     msg.body = text_body
     msg.html = html_body
     # mail.send(msg)
-    Thread(target = send_async_email, args = (app, msg)).start()
+    Thread(
+              target = send_async_email,
+              args = (current_app._get_current_object(), msg)
+          ).start()
 
 # fonction d'envoie de mail pour reset son mot de passe, basé sur send_email
 def send_password_reset_email(user):

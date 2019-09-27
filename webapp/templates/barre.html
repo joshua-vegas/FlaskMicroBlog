@@ -13,15 +13,15 @@
     <body>
         <div>
             Microblog :
-            <a href="{{ url_for('index') }}">Accueil</a>
-            <a href="/employees">Tableau employee</a>
-            <a href="{{ url_for('inscription')}}">Création de compte</a>
+            <a href="{{ url_for('main.index') }}">Accueil</a>
+            <a href="{{ url_for('main.employees')}}">Tableau employee</a>
+            <a href="{{ url_for('auth.register')}}">Création de compte</a>
             {% if current_user.is_anonymous %}
-                <a href="/login">Connexion / login</a>
+                <a href="{{ url_for('auth.login') }}">Connexion / login</a>
             {% else %}
-                <a href="/logout">Déconnexion / logout</a>
+                <a href="{{ url_for('auth.logout') }}">Déconnexion / logout</a>
             {% endif %}
-            <a href="{{ url_for('reset_password_request') }}"> Réinitialisez votre mot de passe</a>
+            <a href="{{ url_for('auth.reset_password_request') }}"> Réinitialisez votre mot de passe</a>
             <hr>
             <!--
                 Grâce à la fonction get_flashed_messages on récupère dans une

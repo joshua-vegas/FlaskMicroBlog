@@ -15,11 +15,11 @@
                 <tr>
                     {% if loop.index == 2 %}
                         {% for col in row %}
-                            <td>{{ col | formater_date | upper }}</td>
+                            <td>{{ col | upper }}</td>
                         {% endfor %}
                     {% else %}
                         {% for col in row %}
-                            <td>{{ col | formater_date }}</td>
+                            <td>{{ col }}</td>
                         {% endfor %}
                     {% endif %}
                 </tr>

@@ -1,5 +1,7 @@
-from webapp import app
 import datetime, time
+from webapp import create_app
+
+app = create_app()
 
 @app.template_filter("formater_date")
 

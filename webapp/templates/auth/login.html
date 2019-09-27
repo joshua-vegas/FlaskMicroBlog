@@ -20,7 +20,7 @@
         <p>{{ form.submit() }}</p>
         <p>
             Mot de passe oublié ?
-            <a href="{{ url_for('reset_password_request') }}">Cliquez ici</a>
+            <a href="{{ url_for('auth.reset_password_request') }}">Cliquez ici</a>
         </p>
     </form>
 {% endblock %}
