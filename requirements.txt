@@ -20,7 +20,7 @@ mysql-connector-python==8.0.17
 nltk==3.4.5
 numpy==1.17.2
 pandas==0.25.1
-Pillow==6.2.0
+Pillow==9.3.0
 protobuf==3.9.1
 PyJWT==1.7.1
 pyparsing==2.4.2
